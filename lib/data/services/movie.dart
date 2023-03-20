@@ -1,16 +1,15 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import '/data/models/date_range.dart';
 import '/data/models/movie_details.dart';
 import '/data/models/movie_field.dart';
 import '/data/models/movie_preview.dart';
+import '/data/models/movies_filter.dart';
 
 abstract class MovieService {
   Future<List<MoviePreview>> getMovies({
     int? page,
     int? limit,
-    DateRange? releaseDate,
-    MovieField? orderBy,
+    required MoviesFilter filter,
   });
 
   Future<MovieDetails> getMovie(int id);
@@ -25,26 +24,25 @@ class GraphQlMovieService implements MovieService {
   Future<List<MoviePreview>> getMovies({
     int? page,
     int? limit,
-    DateRange? releaseDate,
-    MovieField? orderBy,
+    required MoviesFilter filter,
   }) {
     final String? pageArgument = page == null ? null : 'page: $page';
     final String? limitArgument = limit == null ? null : 'limit: $limit';
-    final String? releaseDateArgument = releaseDate == null
+    final String? releaseDateArgument = filter.releaseDate == null
         ? null
         : [
             'release_date: ',
             '{',
             [
-              if (releaseDate.from != null)
-                'from: "${releaseDate.from!.toIso8601String()}"',
-              if (releaseDate.to != null)
-                'to: "${releaseDate.to!.toIso8601String()}"',
+              if (filter.releaseDate!.from != null)
+                'from: "${filter.releaseDate!.from!.toIso8601String()}"',
+              if (filter.releaseDate!.to != null)
+                'to: "${filter.releaseDate!.to!.toIso8601String()}"',
             ].join(', '),
             '}',
           ].join();
     final String? orderByArgument =
-        orderBy == null ? null : 'order_by: ${orderBy.value}';
+        filter.orderBy == null ? null : 'order_by: ${filter.orderBy!.value}';
 
     final String arguments = [
       pageArgument,
