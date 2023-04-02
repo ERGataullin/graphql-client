@@ -1,5 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '/data/models/director.dart';
 import '/data/models/movie_details.dart';
 import '/data/models/movie_field.dart';
 import '/data/models/movie_preview.dart';
@@ -13,6 +14,8 @@ abstract class MovieService {
   });
 
   Future<MovieDetails> getMovie(int id);
+
+  Future<List<Director>> getDirectors();
 }
 
 class GraphQlMovieService implements MovieService {
@@ -89,5 +92,15 @@ class GraphQlMovieService implements MovieService {
     return _client
         .query(QueryOptions(document: gql(query)))
         .then((result) => MovieDetails.fromJson(result.data!['movie']));
+  }
+
+  @override
+  Future<List<Director>> getDirectors() {
+    return _client
+        .query(QueryOptions(document: gql('{directors()}')))
+        .then((result) => result.data?['movies'] ?? const [])
+        .then((jsons) => jsons
+            .map<MoviePreview>((json) => MoviePreview.fromJson(json))
+            .toList(growable: false));
   }
 }
