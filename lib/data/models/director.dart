@@ -20,4 +20,12 @@ class Director {
   final int gender; // Хотел энам, но там трансгендеры. Не понял кто есть кто.
   final int uid;
   final String department;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'gender': gender,
+        'uid': uid,
+        'department': department,
+      };
 }

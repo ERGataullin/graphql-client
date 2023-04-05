@@ -36,6 +36,7 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: _movie!
                     .toJson()
                     .entries
