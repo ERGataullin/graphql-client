@@ -33,14 +33,24 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
       ),
       body: _showLoader
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
-              child: Text(
-                _movie!
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: _movie!
                     .toJson()
                     .entries
-                    .map((entry) => '${entry.key}: ${entry.value}')
-                    .join('\n'),
+                    .map((entry) => TableRow(children: [
+                          Text(
+                            entry.key,
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            entry.value.toString(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ]))
+                    .toList(growable: false),
               ),
             ),
     );

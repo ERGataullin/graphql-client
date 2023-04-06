@@ -4,6 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '/data/services/movie.dart';
+import '/presentation/director_details/director_details.dart';
 import '/presentation/home/home.dart';
 import '/presentation/movie_details/movie_details.dart';
 
@@ -30,6 +31,9 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(useMaterial3: true),
+      darkTheme: ThemeData.dark(useMaterial3: true),
       routerConfig: GoRouter(
         routes: [
           GoRoute(
@@ -39,6 +43,12 @@ class _App extends StatelessWidget {
           GoRoute(
             path: '/movies/:id',
             builder: (context, state) => MovieDetailsView(
+              id: int.parse(state.params['id']!),
+            ),
+          ),
+          GoRoute(
+            path: '/directors/:id',
+            builder: (context, state) => DirectorDetailsView(
               id: int.parse(state.params['id']!),
             ),
           ),
